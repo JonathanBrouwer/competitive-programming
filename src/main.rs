@@ -1,6 +1,6 @@
 use std::fmt::Write;
 use std::io;
-use std::io::{BufRead, stdin, StdinLock, stdout};
+use std::io::{stdin, stdout, BufRead, StdinLock};
 use std::marker::PhantomData;
 use std::str::SplitAsciiWhitespace;
 
@@ -21,13 +21,13 @@ fn main() {
         let eq = s1 == s2;
         if !(eq || s1.bytes().zip(s2.bytes()).all(|(b1, b2)| b1 != b2)) {
             writeln!(print, "NO").unwrap();
-            continue
+            continue;
         }
 
-        let mut res = Vec::with_capacity(n+3);
+        let mut res = Vec::with_capacity(n + 3);
         for (i, b) in s1.bytes().enumerate() {
             if b == b'1' {
-                res.push((i+1, i+1));
+                res.push((i + 1, i + 1));
             }
         }
 
@@ -39,7 +39,8 @@ fn main() {
 
         writeln!(print, "YES").unwrap();
         writeln!(print, "{}", res.len()).unwrap();
-        res.iter().for_each(|(x, y)| writeln!(print, "{} {}", x, y).unwrap());
+        res.iter()
+            .for_each(|(x, y)| writeln!(print, "{} {}", x, y).unwrap());
     }
 }
 
@@ -65,7 +66,9 @@ impl Scanner {
         assert!(self.buf_iter.next() == None);
 
         let mut line = String::new();
-        self.reader.read_until(b'\n', unsafe { line.as_mut_vec() }).expect("Failed read");
+        self.reader
+            .read_until(b'\n', unsafe { line.as_mut_vec() })
+            .expect("Failed read");
         line.pop();
         if line.ends_with('\r') {
             line.pop();
@@ -80,7 +83,9 @@ impl Scanner {
                 return token.parse().ok().expect("Failed parse");
             }
             self.buf_str.clear();
-            self.reader.read_until(b'\n', unsafe { self.buf_str.as_mut_vec() }).expect("Failed read");
+            self.reader
+                .read_until(b'\n', unsafe { self.buf_str.as_mut_vec() })
+                .expect("Failed read");
             self.buf_iter = unsafe {
                 // Safety: We don't use `buf_vec` until this iter is empty.
                 std::mem::transmute(self.buf_str.split_ascii_whitespace())
@@ -123,7 +128,6 @@ impl Printer {
         io::Write::write_all(&mut stdout(), self.buffer.as_bytes()).unwrap();
         self.buffer.clear();
         self.buffer.reserve_exact(self.buffer.capacity());
-
     }
 }
 impl Write for Printer {
