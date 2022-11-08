@@ -1,48 +1,20 @@
-use std::fmt::Write;
+use std::fmt::{Write};
 use std::io;
 use std::io::{stdin, stdout, BufRead, StdinLock};
 use std::marker::PhantomData;
 use std::str::SplitAsciiWhitespace;
 
-fn main() {
+fn main() -> Result<(), std::fmt::Error> {
     let mut scan = Scanner::new();
     let mut print = Printer::new();
 
-    let mut vec: Vec<(usize, usize)> = Vec::with_capacity(200005);
-
     for _ in 0..scan.next_usize() {
-        vec.clear();
 
-        let n = scan.next_usize();
-        let s1 = scan.next_line();
-        let s2 = scan.next_line();
-
-        //Impossible
-        let eq = s1 == s2;
-        if !(eq || s1.bytes().zip(s2.bytes()).all(|(b1, b2)| b1 != b2)) {
-            writeln!(print, "NO").unwrap();
-            continue;
-        }
-
-        let mut res = Vec::with_capacity(n + 3);
-        for (i, b) in s1.bytes().enumerate() {
-            if b == b'1' {
-                res.push((i + 1, i + 1));
-            }
-        }
-
-        if eq ^ (res.len() % 2 == 0) {
-            res.push((1, n));
-            res.push((1, 1));
-            res.push((2, n));
-        }
-
-        writeln!(print, "YES").unwrap();
-        writeln!(print, "{}", res.len()).unwrap();
-        res.iter()
-            .for_each(|(x, y)| writeln!(print, "{} {}", x, y).unwrap());
     }
+
+    Ok(())
 }
+
 
 struct Scanner {
     reader: StdinLock<'static>,
