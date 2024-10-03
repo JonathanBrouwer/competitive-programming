@@ -112,3 +112,17 @@ fn gcd(mut a: usize, mut b: usize) -> usize {
 fn lcm(a: usize, b: usize) -> usize {
     a * b / gcd(a, b)
 }
+
+/// n=0 1
+/// n=1 1
+/// n=2 2
+fn fibonacci<const P: usize>(n: usize) -> M<P> {
+    let mut prev = M(1);
+    let mut cur = M(1);
+    for _ in 1..n {
+        let next = cur + prev;
+        prev = cur;
+        cur = next;
+    }
+    cur
+}
