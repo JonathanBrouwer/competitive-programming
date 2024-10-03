@@ -1,5 +1,5 @@
 use std::fmt::{Write};
-use std::io;
+use std::{io, iter};
 use std::io::{stdin, stdout, BufRead, StdinLock};
 use std::marker::PhantomData;
 use std::str::SplitAsciiWhitespace;
@@ -8,9 +8,7 @@ fn main() -> Result<(), std::fmt::Error> {
     let mut scan = Scanner::new();
     let mut print = Printer::new();
 
-    for _ in 0..scan.next_usize() {
 
-    }
 
     Ok(())
 }
@@ -30,12 +28,15 @@ impl Scanner {
         }
     }
 
+    /// Shorthand for self.next::<usize>()
     fn next_usize(&mut self) -> usize {
         self.next()
     }
 
+    /// Expects to be called at a line boundary.
+    /// Returns an entire line excluding newline.
     fn next_line(&mut self) -> String {
-        assert!(self.buf_iter.next() == None);
+        assert_eq!(self.buf_iter.next(), None);
 
         let mut line = String::new();
         self.reader
@@ -49,6 +50,8 @@ impl Scanner {
         line
     }
 
+    /// Parses a `T` from the input
+    /// Consumes whitespace and up to a single newline after the `T` if there is one.
     fn next<T: std::str::FromStr>(&mut self) -> T {
         loop {
             if let Some(token) = self.buf_iter.next() {
@@ -65,6 +68,7 @@ impl Scanner {
         }
     }
 
+    /// Returns an iterator of `T` that will repeatedly call `self.next()`.
     fn iter<T: std::str::FromStr>(&mut self) -> ScannerIter<T> {
         ScannerIter {
             phantom: Default::default(),

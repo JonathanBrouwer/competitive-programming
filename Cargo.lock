@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "codejam-rust"
+name = "competitive-programming"
 version = "0.1.0"
